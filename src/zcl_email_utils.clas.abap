@@ -9,6 +9,14 @@ class ZCL_EMAIL_UTILS definition
             ty_v_destinatario type SOMLRECI1-RECEIVER.
 
         class-methods:
+            SEND_TXT_EMAIL
+                importing
+                    it_destinatarios type stringtab
+                    IV_ASSUNTO type CSEQUENCE
+                    IV_CORPO type CSEQUENCE
+                raising
+                    ZCX_EMAIL_ERROR,
+
             SEND_HTML_EMAIL
                 importing
                     it_destinatarios type stringtab
@@ -20,6 +28,15 @@ class ZCL_EMAIL_UTILS definition
     protected section.
 
         class-methods:
+            SEND_EMAIL
+                importing
+                    it_destinatarios type stringtab
+                    IV_ASSUNTO type CSEQUENCE
+                    IV_CORPO type CSEQUENCE
+                    IV_DOCUMENT_TYPE type csequence
+                raising
+                    ZCX_EMAIL_ERROR,
+
             STRING_TO_TABLE
                 importing
                     IV_CONTENT type STRING
@@ -34,7 +51,29 @@ ENDCLASS.
 
 CLASS ZCL_EMAIL_UTILS IMPLEMENTATION.
 
+    method SEND_TXT_EMAIL.
+
+        send_email(
+            it_destinatarios = it_destinatarios
+            IV_ASSUNTO = IV_ASSUNTO
+            IV_CORPO = IV_CORPO
+            IV_DOCUMENT_TYPE = 'TXT' " @todo RAW
+        ).
+
+    endmethod.
+
     method SEND_HTML_EMAIL.
+
+        send_email(
+            it_destinatarios = it_destinatarios
+            IV_ASSUNTO = IV_ASSUNTO
+            IV_CORPO = IV_CORPO
+            IV_DOCUMENT_TYPE = 'HTM'
+        ).
+
+    endmethod.
+
+    method SEND_EMAIL.
 
       FIELD-SYMBOLS:
                      <LV_DESTINATARIO> TYPE STRING,
@@ -66,7 +105,7 @@ CLASS ZCL_EMAIL_UTILS IMPLEMENTATION.
       CALL FUNCTION 'SO_NEW_DOCUMENT_SEND_API1'
         EXPORTING
           DOCUMENT_DATA                    = LS_DOCUMENT_DATA
-          DOCUMENT_TYPE                    = 'HTM'
+          DOCUMENT_TYPE                    = conv SOODK-OBJTP( IV_DOCUMENT_TYPE )
           PUT_IN_OUTBOX                    = ' '
           COMMIT_WORK                      = 'X'
 *       IMPORTING
