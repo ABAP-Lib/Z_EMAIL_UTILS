@@ -25,6 +25,15 @@ class ZCL_EMAIL_UTILS definition
                 raising
                     ZCX_EMAIL_ERROR.
 
+        class-methods:
+
+            STRING_TO_TABLE
+                importing
+                    IV_CONTENT type STRING
+                    IV_TAB_LINE_LENGTH type I
+                changing
+                    CT_CONTENT type TABLE.
+
     protected section.
 
         class-methods:
@@ -35,15 +44,7 @@ class ZCL_EMAIL_UTILS definition
                     IV_CORPO type CSEQUENCE
                     IV_DOCUMENT_TYPE type csequence
                 raising
-                    ZCX_EMAIL_ERROR,
-
-            STRING_TO_TABLE
-                importing
-                    IV_CONTENT type STRING
-                    IV_TAB_LINE_LENGTH type I
-                changing
-                    CT_CONTENT type TABLE.
-
+                    ZCX_EMAIL_ERROR.
     private section.
 ENDCLASS.
 
